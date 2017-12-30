@@ -104,5 +104,3 @@ class RemarkableConnection():
             for path in local_paths:
                 ftp_client.put(path, remote_paths[i])
                 i += 1
-
-    
