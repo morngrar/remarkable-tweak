@@ -93,3 +93,16 @@ class RemarkableConnection():
         command = "rm {0}*".format(self.template_directory)
         output_exec(self.ssh_client, command)
 
+    def upload_templates(self, local_paths):
+        """Takes list of local paths, uploads all files to remarkable."""
+
+        names = [os.path.split(e)[1] for e in local_paths]
+        remote_paths = self.make_template_paths(names)
+
+        with self.ssh_client.open_sftp() as ftp_client:
+            i = 0
+            for path in local_paths:
+                ftp_client.put(path, remote_paths[i])
+                i += 1
+
+    
