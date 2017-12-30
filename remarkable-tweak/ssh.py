@@ -2,6 +2,8 @@
 
 """This module handles ssh connections to the remarkable."""
 
+import os
+
 import paramiko   # dependency installable from pip
 
 class SSHCommandError(Exception):
@@ -73,7 +75,16 @@ class RemarkableConnection():
     def dump_templates(self, local_directory):
         """Downloads all templates from the reMarkable to local dir."""
 
-        template_names = self.get_template_list()
-        templates = 
+        templates = self.make_template_paths(self.get_template_list())
+
         with self.ssh_client.open_sftp() as ftp_client:
-            pass
+            for path in templates:
+                ftp_client.get(
+                    path,
+                    os.path.join(
+                        local_directory,
+                        os.path.split(path)[1]   # Filename
+                    )
+                )
+
+        
