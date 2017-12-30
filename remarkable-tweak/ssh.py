@@ -87,4 +87,9 @@ class RemarkableConnection():
                     )
                 )
 
-        
+    def purge_templates(self):
+        """Deletes all templates on the reMarkable"""
+
+        command = "rm {0}*".format(self.template_directory)
+        output_exec(self.ssh_client, command)
+
