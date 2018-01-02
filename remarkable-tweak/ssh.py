@@ -51,7 +51,7 @@ class RemarkableConnection():
         """Returns a list of filenames of templates on the remarkable."""
 
         template_list = output_exec(
-            ssh_client,
+            self.ssh_client,
             "ls /usr/share/remarkable/templates"
         )
         template_list = [e.strip() for e in template_list]
@@ -63,14 +63,7 @@ class RemarkableConnection():
         for templates on the remarkable.
         """
 
-        paths_list = [      # The format function takes care of whitespace
-            "'{0}'".format( # in filenames
-                "".join((self.template_directory, e))
-            )
-            for e in filenames
-        ]
-
-        return paths_list
+        return ["".join((self.template_directory, e)) for e in filenames]
 
     def dump_templates(self, local_directory):
         """Downloads all templates from the reMarkable to local dir."""
@@ -93,8 +86,11 @@ class RemarkableConnection():
         command = "rm {0}*".format(self.template_directory)
         output_exec(self.ssh_client, command)
 
-    def upload_templates(self, local_paths):
-        """Takes list of local paths, uploads all files to remarkable."""
+    def upload_templates(self, local_directory):
+        """Takes path to local dir, uploads all files to remarkable."""
+
+        namelist = os.listdir(local_directory)
+        local_paths = [local_directory + name for name in namelist]
 
         names = [os.path.split(e)[1] for e in local_paths]
         remote_paths = self.make_template_paths(names)
@@ -104,3 +100,20 @@ class RemarkableConnection():
             for path in local_paths:
                 ftp_client.put(path, remote_paths[i])
                 i += 1
+
+
+if __name__=="__main__":
+    # Testing code
+    connection = RemarkableConnection("password")
+
+    templates = connection.get_template_list()
+
+    #connection.dump_templates("./templates/")
+
+    #connection.purge_templates()
+
+    print(templates)
+
+    uploadpath = "backup/"
+
+    #connection.upload_templates(uploadpath)
