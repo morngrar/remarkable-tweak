@@ -1,7 +1,11 @@
 # Custom
 *~
 *.db
-.remarkable-tweak/
+backup/
+remarkable-tweak/splash screens/
+remarkable-tweak/templates/
+*.png
+*.rst
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
