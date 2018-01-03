@@ -16,6 +16,8 @@ class Browser(bd.BetterDialog):
             local_paths=None,
             title=None):
 
+        self.parent = parent
+
         self.template_paths = template_paths
         self.template_names = [
             os.path.split(e)[1] for e in self.template_paths
@@ -34,6 +36,7 @@ class Browser(bd.BetterDialog):
             label="Slett",
             command=self.on_right_click_delete
         )
+#        self.context_menu.bind("<FocusOut>", self.context_menu_focusout)
 
         bd.BetterDialog.__init__(self, parent, title)
 
@@ -44,6 +47,7 @@ class Browser(bd.BetterDialog):
         # Makes it so that scrollbar moves.
         self.tree['yscroll'] = scrollbar.set
 
+        # Treeview configuration
         self.tree["columns"] = ("filenames",)
         self.tree.heading("filenames", text="Templates")
         self.tree["show"] = "headings"
@@ -51,7 +55,6 @@ class Browser(bd.BetterDialog):
         self.populate_tree()
 
         # TODO: Canvas-part should go here.
-
 
         # Event bindings
         self.tree.bind("<Double-1>", self.on_double_click)
@@ -74,33 +77,68 @@ class Browser(bd.BetterDialog):
             )
             self.tree_ids[row_id] = name
 
+    def purge_tree(self):
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+        self.tree_ids = {}
+
     def on_double_click(self, event):
-        item = self.tree.selection()[0]
         print("on_double_clicked")
+        item = self.tree.selection()[0]
+
+        # Perhaps not needed?
+
         self.purge_tree()
         self.populate_tree()
 
     def on_right_click(self, event):
-        # show pop-up context menu
-        self.context_menu.post(event.x_root, event.y_root)
+        """show pop-up context menu"""
+
+        try:
+            self.context_menu.tk_popup(event.x_root, event.y_root, 0)
+        finally:
+            self.context_menu.grab_release()
 
     def on_right_click_update(self):
-        # Do update-dialog
-        #print("on_right_click_update called")
+        print("on_right_click_update called")
         item = self.tree.selection()[0]
-        UpdateEntryDialog(self, title="Oppdater detektor", entry=self.tree_ids[item])
+
+        # Perhaps not needed?
+
         self.purge_tree()
         self.populate_tree()
 
     def on_right_click_delete(self):
-        # Delete relevant record from DB with delete_record()
-        # Remember messagebox dialog with confirmation of delete intention.
-        #print("on_right_click_delete called")
+        print("on_right_click_delete called")
         item = self.tree.selection()[0]
-        tag = self.tree_ids[item][0]
-        #print("tag: ", tag)
-        if mb.askquestion("Slette?", "Vil du virkelig slette denne?") == "yes":
-            delete_record(tag)
-            self.purge_tree()
-            self.populate_tree()
+        name = self.tree_ids[item][0]
 
+        # TODO: Delete template locally here
+
+        self.purge_tree()
+        self.populate_tree()
+
+
+class Main(bd.MainFrame):
+    def content(self, master):
+        self.button = ttk.Button(
+            master, text="Test", command=self.on_click_hello
+        )
+        self.button.pack(padx=2, pady=2, fill=tk.X)
+
+    def on_click_hello(self):
+        print("hello, world!")
+        testlist = [
+            "aasda",
+            "asdfg",
+            "kockney"
+        ]
+
+        d = Browser(self.parent, testlist)
+
+if __name__=="__main__":
+
+
+
+    Main(tk.Tk(), "Test")
+#    dialog = Browser(main, )
