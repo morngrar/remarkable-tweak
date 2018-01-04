@@ -10,8 +10,6 @@ class MainFrame(tk.Frame):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        self.interrupt = False
-
         self.content_frame = tk.Frame(self, width=300, height=400)
         self.content(self.content_frame)
         self.content_frame.pack(expand=True)
