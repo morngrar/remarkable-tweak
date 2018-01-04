@@ -17,14 +17,21 @@ class Browser(bd.BetterDialog):
             title=None):
 
         self.parent = parent
-
-        self.template_paths = template_paths
         self.template_names = [
-            os.path.split(e)[1] for e in self.template_paths
+            os.path.split(e)[1] for e in template_paths
         ]
+
+        self.template_paths = {}
+        i = 0
+        for path in template_paths:
+            self.template_paths[self.template_names[i]] = path
+            i += 1
+
         self.local_paths = local_paths
 
         self.tree_ids = {}
+        self.delete_list = []
+        self.upload_list = []
 
         # Context menu
         self.context_menu = tk.Menu(parent, tearoff=0)
@@ -36,11 +43,12 @@ class Browser(bd.BetterDialog):
             label="Slett",
             command=self.on_right_click_delete
         )
-#        self.context_menu.bind("<FocusOut>", self.context_menu_focusout)
 
         bd.BetterDialog.__init__(self, parent, title)
 
     def content(self, master):
+        """Widgets and their bindings in the content frame of the dialog"""
+
         self.tree = ttk.Treeview(master)
         scrollbar = ttk.Scrollbar(master, command=self.tree.yview)
 
@@ -54,14 +62,20 @@ class Browser(bd.BetterDialog):
 
         self.populate_tree()
 
-        # TODO: Canvas-part should go here.
+        self.image_frame = bd.images.ImageFrame(
+            master,
+            width=1404/4,
+            height=1872/4,
+        )
 
         # Event bindings
         self.tree.bind("<Double-1>", self.on_double_click)
         self.tree.bind("<Button-3>", self.on_right_click)
+        self.tree.bind("<ButtonRelease-1>", self.on_click)
 
         self.tree.grid(row=0, sticky="nsew")
         scrollbar.grid(row=0, column=1, sticky="ns")
+        self.image_frame.grid(row=0, column=2, sticky="nw")
 
         master.columnconfigure(0, weight=1)
         master.rowconfigure(0, weight=1)
@@ -82,14 +96,17 @@ class Browser(bd.BetterDialog):
             self.tree.delete(i)
         self.tree_ids = {}
 
+    def on_click(self, event):
+        print("on_click")
+
+        selection = self.tree.focus()
+        item = self.tree.item(selection)
+        name = item["values"][0]
+
+        self.image_frame.load_image(self.template_paths[name])
+
     def on_double_click(self, event):
-        print("on_double_clicked")
-        item = self.tree.selection()[0]
-
-        # Perhaps not needed?
-
-        self.purge_tree()
-        self.populate_tree()
+        pass
 
     def on_right_click(self, event):
         """show pop-up context menu"""
@@ -113,11 +130,15 @@ class Browser(bd.BetterDialog):
         item = self.tree.selection()[0]
         name = self.tree_ids[item][0]
 
-        # TODO: Delete template locally here
+        self.delete_list.append(self.template_paths[name])
+        del self.template_names[self.template_names.index(name)]
 
         self.purge_tree()
         self.populate_tree()
 
+    def execute():
+        # TODO: Do deletions and additions, purge and upload.
+        pass
 
 class Main(bd.MainFrame):
     def content(self, master):
@@ -128,12 +149,12 @@ class Main(bd.MainFrame):
 
     def on_click_hello(self):
         print("hello, world!")
-        testlist = [
-            "aasda",
-            "asdfg",
-            "kockney"
-        ]
 
+        testlist = []
+        for f in os.listdir("backup"):
+            testlist.append(os.path.join("backup/", f))
+        for e in testlist:
+            print(e)
         d = Browser(self.parent, testlist)
 
 if __name__=="__main__":
@@ -141,4 +162,4 @@ if __name__=="__main__":
 
 
     Main(tk.Tk(), "Test")
-#    dialog = Browser(main, )
+
