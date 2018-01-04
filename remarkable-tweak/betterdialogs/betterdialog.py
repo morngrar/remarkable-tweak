@@ -32,7 +32,9 @@ class BetterDialog(tk.Toplevel):
         self.initial_focus = self.content(content)
         content.pack(padx=5, pady=5, fill=tk.BOTH, expand=True)
 
-        self.button_frame()
+        button_frame = tk.Frame(self)
+        self.buttons(button_frame)
+        button_frame.pack(side=tk.RIGHT)
 
         if not self.initial_focus:
             self.initial_focus = self
@@ -53,16 +55,14 @@ class BetterDialog(tk.Toplevel):
         self.grab_set()
         self.wait_window(self)
 
-    def button_frame(self):
-        """Adds a button frame with 'OK' and 'Cancel' buttons.
+    def buttons(self, master):
+        """Adds 'OK' and 'Cancel' buttons to standard button frame.
 
         Override if need for different configuration.
         """
 
-        frame = tk.Frame(self)
-
         widget = ttk.Button(
-            frame,
+            master,
             text="OK",
             width=10,
             command=self.ok,
@@ -71,7 +71,7 @@ class BetterDialog(tk.Toplevel):
         widget.pack(side=tk.LEFT, padx=5, pady=5)
 
         widget = ttk.Button(
-            frame,
+            master,
             text="Cancel",
             width=10,
             command=self.cancel,
@@ -81,6 +81,7 @@ class BetterDialog(tk.Toplevel):
 
         self.bind("<Return>", self.ok)
         self.bind("<Escape>", self.cancel)
+
 
     def content(self, master):
         """Create dialog contentframe (everything but the button frame)
