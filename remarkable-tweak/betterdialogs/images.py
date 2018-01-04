@@ -15,14 +15,12 @@ class ImageFrame(tk.Frame):
             self,
             parent,
             image=None,
-            trigger=None,
             width=265,
             height=370,
             *args,
             **kwargs):
 
         self.parent = parent
-        self.trigger = trigger
         self.image = image
         self.width = width
         self.height = height
@@ -51,4 +49,4 @@ class ImageFrame(tk.Frame):
 
         self.image = imagepath
         load_image(self.canvas, self.image)
-        self.update_idletasks()   # Might have to be done to canvas instead
+        self.update_idletasks()  # Might have to be done to canvas instead
