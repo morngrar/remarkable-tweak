@@ -127,7 +127,7 @@ class BetterDialog(tk.Toplevel):
         self.update_idletasks()
 
         try:
-            self.apply()
+            self.execute()
         finally:
             self.cancel()
 

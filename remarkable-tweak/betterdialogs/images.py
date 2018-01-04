@@ -1,10 +1,13 @@
 import tkinter as tk
+import PIL
 from PIL import ImageTk, Image  # Pillow is needed.
 
-def load_image(canvas, filepath):
+def load_image(canvas, filepath, bounds=None):
     """Takes a tk.Canvas and a filepath, loads image into canvas"""
 
-    image_data = Image.open(filename)
+    image_data = Image.open(filepath)
+    if bounds:
+        image_data.thumbnail(bounds, PIL.Image.ANTIALIAS)
     canvas.image = ImageTk.PhotoImage(image_data)
     canvas.create_image(0, 0, image=canvas.image, anchor=tk.NW)
 
@@ -34,7 +37,7 @@ class ImageFrame(tk.Frame):
         )
         self.canvas.pack(side = tk.LEFT)
         if self.image:
-            load_image(canvas, self.image)
+            load_image(self.canvas, self.image)
         self.canvas_frame.pack()
 
     def load_image(self, imagepath, width=None, height=None):
@@ -48,5 +51,6 @@ class ImageFrame(tk.Frame):
             self.canvas["height"] = height
 
         self.image = imagepath
-        load_image(self.canvas, self.image)
-        self.update_idletasks()  # Might have to be done to canvas instead
+        size = (self.width, self.height)
+        load_image(self.canvas, self.image, bounds=size)
+        self.canvas.update_idletasks()  # Might have to be done to canvas instead
