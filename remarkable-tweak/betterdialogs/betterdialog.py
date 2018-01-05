@@ -26,19 +26,14 @@ class BetterDialog(tk.Toplevel):
         if title:
             self.title(title)
 
-        self.return_object = None
-
         content = tk.Frame(self, width=300, height=400)
         self.initial_focus = self.content(content)
         content.pack(padx=5, pady=5, fill=tk.BOTH, expand=True)
 
-        button_frame = tk.Frame(self)
-        self.buttons(button_frame)
-        button_frame.pack(side=tk.RIGHT)
+        self.buttons(self)
 
         if not self.initial_focus:
             self.initial_focus = self
-
         self.protocol("WM_DELETE_WINDOW", self.cancel)
 
         parent_params = list(parse_geometry(parent.geometry()))
@@ -61,8 +56,11 @@ class BetterDialog(tk.Toplevel):
         Override if need for different configuration.
         """
 
+        subframe = tk.Frame(master)
+        subframe.pack(side=tk.RIGHT)
+
         ttk.Button(
-            master,
+            subframe,
             text="OK",
             width=10,
             command=self.ok,
@@ -70,7 +68,7 @@ class BetterDialog(tk.Toplevel):
         ).pack(side=tk.LEFT, padx=5, pady=5)
 
         ttk.Button(
-            master,
+            subframe,
             text="Cancel",
             width=10,
             command=self.cancel,
