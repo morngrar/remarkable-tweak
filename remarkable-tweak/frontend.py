@@ -2,7 +2,9 @@
 
 import tkinter as tk
 from tkinter import ttk
+import tkinter.filedialog as fd
 import os
+
 
 import betterdialogs as bd
 
@@ -17,6 +19,8 @@ class Browser(bd.BetterDialog):
             title=None):
 
         self.parent = parent
+        self.result = None
+
         self.template_names = [os.path.split(e)[1] for e in template_paths]
         self.template_paths = {}
         i = 0
@@ -147,7 +151,17 @@ class Browser(bd.BetterDialog):
         #   - Spawns file-open dialog
         #   - Adds file path to template_paths
         #   - Refresh treeview
-        pass
+        file_path = fd.askopenfilename()
+        name = os.path.split(file_path)[1]
+
+        self.template_paths[name] = file_path
+        print(self.template_paths)
+        self.template_names.append(name)
+        print(self.template_names)
+        self.template_names.sort()
+        print(self.template_names)
+
+        self.refresh_tree()
 
     def backup(self):
         """Saves all templates currently in view to local dir."""
@@ -197,7 +211,10 @@ class Browser(bd.BetterDialog):
     def execute(self):
         # TODO: Do remote purge and upload. After having gotten permission
         # from message box. Finally remove local cache.
-        pass
+        # NO: simply put list of local paths to be uploaded into
+        # result variable! Let backend do the rest.
+        self.result = self.template_paths
+
 
 class Main(bd.MainFrame):
     def content(self, master):
@@ -213,6 +230,8 @@ class Main(bd.MainFrame):
         for f in os.listdir("backup"):
             testlist.append(os.path.join("backup/", f))
         d = Browser(self.parent, testlist)
+
+        print(d.result)
 
 if __name__=="__main__":
     Main(tk.Tk(), "Test")
