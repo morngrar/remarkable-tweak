@@ -129,7 +129,7 @@ class Browser(bd.BetterDialog):
     def populate_tree(self):
         """Populates the treeview with the template names."""
 
-        for name in self.template_names:
+        for name in sorted(self.template_names, reverse=True):
             row_id = self.tree.insert(
                 "",
                 0,
@@ -147,19 +147,14 @@ class Browser(bd.BetterDialog):
         self.populate_tree()
 
     def add_new_template(self):
-        # - 'Add new template'
-        #   - Spawns file-open dialog
-        #   - Adds file path to template_paths
-        #   - Refresh treeview
-        file_path = fd.askopenfilename()
+        """Opens a open-file dialog, and adds the file to templates."""
+        file_path = fd.askopenfilename(
+            filetypes=(("PNG images", "*.png"),)
+        )
         name = os.path.split(file_path)[1]
 
         self.template_paths[name] = file_path
-        print(self.template_paths)
         self.template_names.append(name)
-        print(self.template_names)
-        self.template_names.sort()
-        print(self.template_names)
 
         self.refresh_tree()
 
