@@ -78,12 +78,7 @@ class Browser(bd.BetterDialog):
         master.rowconfigure(0, weight=1)
 
 
-    # TODO: override buttons:
-    # - 'Add new template'
-    #   - Spawns file-open dialog
-    #   - Adds file path to template_paths
-    #   - Refresh treeview
-
+    
     def buttons(self, master):
         """Overridden. Adds buttons to lower frame."""
 
@@ -148,9 +143,14 @@ class Browser(bd.BetterDialog):
         self.populate_tree()
 
     def add_new_template(self):
+        # - 'Add new template'
+        #   - Spawns file-open dialog
+        #   - Adds file path to template_paths
+        #   - Refresh treeview
         pass
 
     def backup(self):
+        """Saves all templates currently in view to local dir."""
         pass
 
     def on_click(self, event):
