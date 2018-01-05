@@ -203,7 +203,7 @@ class Browser(bd.BetterDialog):
         superset = set(self.template_names)
         self.template_names = list(superset - selection)
 
-        for name in self.template_names:
+        for name in selection:
             del self.template_paths[name]
 
         self.refresh_tree()
