@@ -17,10 +17,7 @@ class Browser(bd.BetterDialog):
             title=None):
 
         self.parent = parent
-        self.template_names = [
-            os.path.split(e)[1] for e in template_paths
-        ]
-
+        self.template_names = [os.path.split(e)[1] for e in template_paths]
         self.template_paths = {}
         i = 0
         for path in template_paths:
@@ -29,18 +26,15 @@ class Browser(bd.BetterDialog):
 
         self.local_paths = local_paths
 
-        self.tree_ids = {}
-        self.delete_list = []
-        self.upload_list = []
 
         # Context menu
         self.context_menu = tk.Menu(parent, tearoff=0)
         self.context_menu.add_command(
-            label="Oppdater",
-            command=self.on_right_click_update
+            label="Save local copy",
+            command=self.on_right_click_copy
         )
         self.context_menu.add_command(
-            label="Slett",
+            label="Delete",
             command=self.on_right_click_delete
         )
 
@@ -50,6 +44,8 @@ class Browser(bd.BetterDialog):
         """Widgets and their bindings in the content frame of the dialog"""
 
         self.tree = ttk.Treeview(master)
+        self.tree_ids = dict()
+
         scrollbar = ttk.Scrollbar(master, command=self.tree.yview)
 
         # Makes it so that scrollbar moves.
@@ -70,7 +66,8 @@ class Browser(bd.BetterDialog):
 
         # Event bindings
         self.tree.bind("<Double-1>", self.on_double_click)
-        self.tree.bind("<Button-3>", self.on_right_click)
+        self.tree.bind("<ButtonRelease-3>", self.on_right_click)
+        self.tree.bind("<Delete>", self.on_right_click_delete)
         self.tree.bind("<ButtonRelease-1>", self.on_click)
 
         self.tree.grid(row=0, sticky="nsew")
@@ -79,6 +76,56 @@ class Browser(bd.BetterDialog):
 
         master.columnconfigure(0, weight=1)
         master.rowconfigure(0, weight=1)
+
+
+    # TODO: override buttons:
+    # - 'Add new template'
+    #   - Spawns file-open dialog
+    #   - Adds file path to template_paths
+    #   - Refresh treeview
+
+    def buttons(self, master):
+        """Overridden. Adds buttons to lower frame."""
+
+        leftframe = tk.Frame(master)
+        leftframe.pack(side=tk.LEFT)
+        rightframe = tk.Frame(master)
+        rightframe.pack(side=tk.RIGHT)
+
+        ttk.Button(
+            leftframe,
+            text="Take backup",
+            width=10,
+            command=self.backup,
+            default=tk.ACTIVE
+        ).pack(side=tk.LEFT, padx=5, pady=5)
+
+        ttk.Button(
+            rightframe,
+            text="Add new",
+            width=10,
+            command=self.add_new_template,
+            default=tk.ACTIVE
+        ).pack(side=tk.LEFT, padx=5, pady=5)
+
+        ttk.Button(
+            rightframe,
+            text="Upload",
+            width=10,
+            command=self.ok,
+            default=tk.ACTIVE
+        ).pack(side=tk.LEFT, padx=5, pady=5)
+
+        ttk.Button(
+            rightframe,
+            text="Cancel",
+            width=10,
+            command=self.cancel,
+            default=tk.ACTIVE
+        ).pack(side=tk.LEFT, padx=5, pady=5)
+
+        self.bind("<Return>", self.ok)
+        self.bind("<Escape>", self.cancel)
 
     def populate_tree(self):
         """Populates the treeview with the template names."""
@@ -96,6 +143,16 @@ class Browser(bd.BetterDialog):
             self.tree.delete(i)
         self.tree_ids = {}
 
+    def refresh_tree(self):
+        self.purge_tree()
+        self.populate_tree()
+
+    def add_new_template(self):
+        pass
+
+    def backup(self):
+        pass
+
     def on_click(self, event):
         print("on_click")
 
@@ -109,35 +166,34 @@ class Browser(bd.BetterDialog):
         pass
 
     def on_right_click(self, event):
-        """show pop-up context menu"""
+        """Show pop-up context menu"""
 
-        try:
-            self.context_menu.tk_popup(event.x_root, event.y_root, 0)
-        finally:
-            self.context_menu.grab_release()
+        self.context_menu.tk_popup(event.x_root, event.y_root, 0)
+#        try:
+#            self.context_menu.tk_popup(event.x_root, event.y_root, 0)
+#        finally:
+#            self.context_menu.grab_release()
 
-    def on_right_click_update(self):
-        print("on_right_click_update called")
-        item = self.tree.selection()[0]
+    def on_right_click_copy(self):
+        """Open file save dialog. Save a copy to selected location."""
 
-        # Perhaps not needed?
+        # TODO: filesavedialog here
+        pass
 
-        self.purge_tree()
-        self.populate_tree()
-
-    def on_right_click_delete(self):
+    def on_right_click_delete(self, event=None):
         print("on_right_click_delete called")
-        item = self.tree.selection()[0]
-        name = self.tree_ids[item][0]
 
-        self.delete_list.append(self.template_paths[name])
-        del self.template_names[self.template_names.index(name)]
+        selection = set(
+            [self.tree.item(e)["values"][0] for e in self.tree.selection()]
+        )
+        superset = set(self.template_names)
+        self.template_names = list(superset - selection)
 
-        self.purge_tree()
-        self.populate_tree()
+        self.refresh_tree()
 
-    def execute():
-        # TODO: Do deletions and additions, purge and upload.
+    def execute(self):
+        # TODO: Do remote purge and upload. After having gotten permission
+        # from message box. Finally remove local cache.
         pass
 
 class Main(bd.MainFrame):
@@ -153,8 +209,6 @@ class Main(bd.MainFrame):
         testlist = []
         for f in os.listdir("backup"):
             testlist.append(os.path.join("backup/", f))
-        for e in testlist:
-            print(e)
         d = Browser(self.parent, testlist)
 
 if __name__=="__main__":
