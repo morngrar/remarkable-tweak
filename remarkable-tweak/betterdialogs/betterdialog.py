@@ -61,23 +61,21 @@ class BetterDialog(tk.Toplevel):
         Override if need for different configuration.
         """
 
-        widget = ttk.Button(
+        ttk.Button(
             master,
             text="OK",
             width=10,
             command=self.ok,
             default=tk.ACTIVE
-        )
-        widget.pack(side=tk.LEFT, padx=5, pady=5)
+        ).pack(side=tk.LEFT, padx=5, pady=5)
 
-        widget = ttk.Button(
+        ttk.Button(
             master,
             text="Cancel",
             width=10,
             command=self.cancel,
             default=tk.ACTIVE
-        )
-        widget.pack(side=tk.LEFT, padx=5, pady=5)
+        ).pack(side=tk.LEFT, padx=5, pady=5)
 
         self.bind("<Return>", self.ok)
         self.bind("<Escape>", self.cancel)
