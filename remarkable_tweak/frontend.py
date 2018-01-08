@@ -9,6 +9,7 @@ import shutil
 
 import betterdialogs as bd
 import system
+import backend
 
 class Browser(bd.BetterDialog):
     """Dialog for browsing templates."""
@@ -258,9 +259,7 @@ class Browser(bd.BetterDialog):
 
 
 class Main(bd.MainFrame):
-    # TODO: Add proper button for existing function
-    # TODO: Add button for loading local backup
-    #       (greyed out if backup not taken)
+    """Main menu window of the application."""
 
     def content(self, master):
         ttk.Button(
@@ -282,18 +281,48 @@ class Main(bd.MainFrame):
         remarkable.
         """
 
-        # path_list = []
-        # for f in os.listdir(system.WORKING_DIR):
-        #     path_list.append(os.path.join(system.WORKING_DIR, f))
+        backend.download()
 
-        dialog = Browser(self.parent, self, system.WORKING_DIR)
+        dialog = Browser(
+            self.parent,
+            self,
+            system.WORKING_DIR,
+            title="Browsing reMarkable"
+        )
 
-        print(dialog.result)
+        if dialog.result:
+            try:
+                backend.upload(dialog.result)
+            except:
+                mb.showerror(
+                    title="Error!",
+                    message=(
+                        "Something went wrong!. Make sure that your "
+                        "reMarkable is connected via USB, and retry."
+                        )
+                )
 
     def on_click_load(self):
         """Open browser dialog on local backup"""
 
+        dialog = Browser(
+            self.parent,
+            self,
+            system.BACKUP_DIR,
+            title="Browsing backup"
+        )
 
+        if dialog.result:
+            try:
+                backend.upload(dialog.result)
+            except:
+                mb.showerror(
+                    title="Error!",
+                    message=(
+                        "Something went wrong!. Make sure that your "
+                        "reMarkable is connected via USB, and retry."
+                        )
+                )
 
 if __name__=="__main__":
-    Main(tk.Tk(), "Test")
+    Main(tk.Tk(), "Frontend test")
