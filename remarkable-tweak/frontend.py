@@ -3,10 +3,12 @@
 import tkinter as tk
 from tkinter import ttk
 import tkinter.filedialog as fd
+from tkinter import messagebox as mb
 import os
-
+import shutil
 
 import betterdialogs as bd
+import system
 
 class Browser(bd.BetterDialog):
     """Dialog for browsing templates."""
@@ -15,7 +17,6 @@ class Browser(bd.BetterDialog):
             self,
             parent,
             template_paths,
-            local_paths=None,
             title=None):
 
         self.parent = parent
@@ -27,9 +28,6 @@ class Browser(bd.BetterDialog):
         for path in template_paths:
             self.template_paths[self.template_names[i]] = path
             i += 1
-
-        self.local_paths = local_paths
-
 
         # Context menu
         self.context_menu = tk.Menu(parent, tearoff=0)
@@ -160,7 +158,13 @@ class Browser(bd.BetterDialog):
 
     def backup(self):
         """Saves all templates currently in view to local dir."""
-        pass
+
+        for name in self.template_names:
+            shutil.copy(
+                self.template_paths[name],
+                system.BACKUP_DIR
+            )
+
 
     def on_click(self, event):
         print("on_click")
