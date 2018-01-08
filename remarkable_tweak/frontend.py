@@ -208,11 +208,25 @@ class Browser(bd.BetterDialog):
         self.refresh_tree()
 
     def execute(self):
-        # TODO: Do remote purge and upload. After having gotten permission
-        # from message box. Finally remove local cache.
+        # TODO: Do remote purge and upload. Finally remove local cache.
         # NO: simply put list of local paths to be uploaded into
         # result variable! Let backend do the rest.
         self.result = self.template_paths
+
+    def check_input(self):
+        """Notifies user about uploading."""
+
+        question = (
+            "This will upload your changes to the reMarkable, and might "
+            "delete some or all templates on it. Are you sure?"
+        )
+
+        answer = mb.askquestion("Upload changes?", question)
+
+        if answer == "yes":
+            return 1
+        else:
+            return 0
 
 
 class Main(bd.MainFrame):
