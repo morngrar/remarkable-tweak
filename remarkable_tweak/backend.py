@@ -2,10 +2,9 @@
 
 """Backend, separating ssh-code from frontend"""
 
-import ssh
 import os
-import shutil
 
+import ssh
 import system
 
 PASSWORD = ""
