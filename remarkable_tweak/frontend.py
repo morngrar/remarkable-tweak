@@ -25,6 +25,9 @@ class Browser(bd.BetterDialog):
         self.master_widget = master_widget
         self.result = None
 
+        backend.clean_working_dir()
+        backend.download()
+
         template_paths = []
         for f in os.listdir(template_directory):
             template_paths.append(os.path.join(template_directory, f))
@@ -257,7 +260,6 @@ class Browser(bd.BetterDialog):
         else:
             return 0
 
-
 class Main(bd.MainFrame):
     """Main menu window of the application."""
 
@@ -281,8 +283,6 @@ class Main(bd.MainFrame):
         remarkable.
         """
 
-        backend.download()
-
         dialog = Browser(
             self.parent,
             self,
@@ -291,8 +291,12 @@ class Main(bd.MainFrame):
         )
 
         if dialog.result:
+            paths = [
+               dialog.result[key] for key in dialog.result.keys()
+            ]
+
             try:
-                backend.upload(dialog.result)
+                backend.upload(paths)
             except:
                 mb.showerror(
                     title="Error!",
@@ -313,8 +317,12 @@ class Main(bd.MainFrame):
         )
 
         if dialog.result:
+            paths = [
+               dialog.result[key] for key in dialog.result.keys()
+            ]
+
             try:
-                backend.upload(dialog.result)
+                backend.upload(paths)
             except:
                 mb.showerror(
                     title="Error!",
