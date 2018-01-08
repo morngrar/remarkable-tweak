@@ -91,9 +91,10 @@ class BetterDialog(tk.Toplevel):
     def check_input(self):
         """Method for checking that dialog input is valid.
 
-        This method is automatically called before the dialog is destroyed.
-        By default it always returns OK. Override to implement your
-        input-checking to make sure the dialog doesn't accept invalid data.
+        This method is automatically called before the dialog is
+        destroyed. By default it always returns OK. Override to implement
+        your input-checking to make sure the dialog doesn't accept
+        invalid data.
         """
 
         return 1
