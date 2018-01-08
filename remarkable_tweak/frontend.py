@@ -22,7 +22,9 @@ class Browser(bd.BetterDialog):
         self.parent = parent
         self.result = None
 
-        self.template_names = [os.path.split(e)[1] for e in template_paths]
+        self.template_names = [
+            os.path.split(e)[1] for e in template_paths
+        ]
         self.template_paths = {}
         i = 0
         for path in template_paths:
@@ -43,7 +45,7 @@ class Browser(bd.BetterDialog):
         bd.BetterDialog.__init__(self, parent, title)
 
     def content(self, master):
-        """Widgets and their bindings in the content frame of the dialog"""
+        """Content frame of the dialog"""
 
         self.tree = ttk.Treeview(master)
         self.tree_ids = dict()
@@ -79,8 +81,6 @@ class Browser(bd.BetterDialog):
         master.columnconfigure(0, weight=1)
         master.rowconfigure(0, weight=1)
 
-
-    
     def buttons(self, master):
         """Overridden. Adds buttons to lower frame."""
 
@@ -136,6 +136,8 @@ class Browser(bd.BetterDialog):
             self.tree_ids[row_id] = name
 
     def purge_tree(self):
+        """Deletes all elements of treeview."""
+
         for i in self.tree.get_children():
             self.tree.delete(i)
         self.tree_ids = {}
@@ -146,6 +148,7 @@ class Browser(bd.BetterDialog):
 
     def add_new_template(self):
         """Opens a open-file dialog, and adds the file to templates."""
+
         file_path = fd.askopenfilename(
             filetypes=(("PNG images", "*.png"),)
         )
@@ -188,10 +191,13 @@ class Browser(bd.BetterDialog):
 #            self.context_menu.grab_release()
 
     def on_right_click_copy(self):
-        """Open directory dialog. Save selected items to selected location."""
+        """Save selected items to selected location."""
 
         directory = fd.askdirectory()
-        selection = [self.tree.item(e)["values"][0] for e in self.tree.selection()]
+        selection = [
+            self.tree.item(e)["values"][0] for e in self.tree.selection()
+        ]
+
         for name in selection:
             shutil.copy(
                 self.template_paths[name],
@@ -203,7 +209,10 @@ class Browser(bd.BetterDialog):
         print("on_right_click_delete called")
 
         selection = set(
-            [self.tree.item(e)["values"][0] for e in self.tree.selection()]
+            [
+                self.tree.item(e)["values"][0]
+                for e in self.tree.selection()
+            ]
         )
         superset = set(self.template_names)
         self.template_names = list(superset - selection)
