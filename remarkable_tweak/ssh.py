@@ -86,11 +86,8 @@ class RemarkableConnection():
         command = "rm {0}*".format(self.template_directory)
         output_exec(self.ssh_client, command)
 
-    def upload_templates(self, local_directory):
-        """Takes path to local dir, uploads all files to remarkable."""
-
-        namelist = os.listdir(local_directory)
-        local_paths = [local_directory + name for name in namelist]
+    def upload_templates(self, local_paths):
+        """Takes list of paths, uploads all files to remarkable."""
 
         names = [os.path.split(e)[1] for e in local_paths]
         remote_paths = self.make_template_paths(names)
