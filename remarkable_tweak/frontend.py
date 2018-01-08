@@ -16,11 +16,17 @@ class Browser(bd.BetterDialog):
     def __init__(
             self,
             parent,
-            template_paths,
+            master_widget,
+            template_directory,
             title=None):
 
         self.parent = parent
+        self.master_widget = master_widget
         self.result = None
+
+        template_paths = []
+        for f in os.listdir(template_directory):
+            template_paths.append(os.path.join(template_directory, f))
 
         self.template_names = [
             os.path.split(e)[1] for e in template_paths
@@ -162,11 +168,15 @@ class Browser(bd.BetterDialog):
     def backup(self):
         """Saves all templates currently in view to local dir."""
 
-        for name in self.template_names:
-            shutil.copy(
-                self.template_paths[name],
-                system.BACKUP_DIR
-            )
+        if self.template_names:
+            for name in self.template_names:
+                shutil.copy(
+                    self.template_paths[name],
+                    system.BACKUP_DIR
+                )
+
+            self.master_widget.backup_button.config(state="normal")
+            mb.showinfo(message="Backup taken!")
 
 
     def on_click(self, event):
@@ -254,18 +264,36 @@ class Main(bd.MainFrame):
 
     def content(self, master):
         ttk.Button(
-            master, text="Test", command=self.on_click_hello
+            master, text="Browse reMarkable", command=self.on_click_browse
         ).pack(padx=2, pady=2, fill=tk.X)
 
-    def on_click_hello(self):
-        print("hello, world!")
+        self.backup_button = ttk.Button(
+            master, text="Load local backup", command=self.on_click_load
+        )
+        self.backup_button.pack(padx=2, pady=2, fill=tk.X)
 
-        testlist = []
-        for f in os.listdir("backup"):
-            testlist.append(os.path.join("backup/", f))
-        d = Browser(self.parent, testlist)
+        if not os.listdir(system.BACKUP_DIR):
+            self.backup_button.config(state="disabled")
 
-        print(d.result)
+    def on_click_browse(self):
+        """Open browser dialog after downloading templates.
+
+        Loads templates from .remarkable-tweak/temp. Uploads changes to
+        remarkable.
+        """
+
+        # path_list = []
+        # for f in os.listdir(system.WORKING_DIR):
+        #     path_list.append(os.path.join(system.WORKING_DIR, f))
+
+        dialog = Browser(self.parent, self, system.WORKING_DIR)
+
+        print(dialog.result)
+
+    def on_click_load(self):
+        """Open browser dialog on local backup"""
+
+
 
 if __name__=="__main__":
     Main(tk.Tk(), "Test")
