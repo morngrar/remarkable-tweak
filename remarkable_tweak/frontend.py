@@ -188,10 +188,16 @@ class Browser(bd.BetterDialog):
 #            self.context_menu.grab_release()
 
     def on_right_click_copy(self):
-        """Open file save dialog. Save a copy to selected location."""
+        """Open directory dialog. Save selected items to selected location."""
 
-        # TODO: filesavedialog here
-        pass
+        directory = fd.askdirectory()
+        selection = [self.tree.item(e)["values"][0] for e in self.tree.selection()]
+        for name in selection:
+            shutil.copy(
+                self.template_paths[name],
+                directory
+            )
+
 
     def on_right_click_delete(self, event=None):
         print("on_right_click_delete called")
@@ -208,9 +214,12 @@ class Browser(bd.BetterDialog):
         self.refresh_tree()
 
     def execute(self):
-        # TODO: Do remote purge and upload. Finally remove local cache.
-        # NO: simply put list of local paths to be uploaded into
-        # result variable! Let backend do the rest.
+        """Put files to be uploaded in result variable.
+
+        If dialog is exited in any other way, the result variable will
+        be None.
+        """
+
         self.result = self.template_paths
 
     def check_input(self):
@@ -230,11 +239,14 @@ class Browser(bd.BetterDialog):
 
 
 class Main(bd.MainFrame):
+    # TODO: Add proper button for existing function
+    # TODO: Add button for loading local backup
+    #       (greyed out if backup not taken)
+
     def content(self, master):
-        self.button = ttk.Button(
+        ttk.Button(
             master, text="Test", command=self.on_click_hello
-        )
-        self.button.pack(padx=2, pady=2, fill=tk.X)
+        ).pack(padx=2, pady=2, fill=tk.X)
 
     def on_click_hello(self):
         print("hello, world!")
