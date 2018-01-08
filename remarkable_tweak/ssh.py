@@ -52,7 +52,7 @@ class RemarkableConnection():
 
         template_list = output_exec(
             self.ssh_client,
-            "ls /usr/share/remarkable/templates"
+            "ls {}".format(self.template_directory)
         )
         template_list = [e.strip() for e in template_list]
 
