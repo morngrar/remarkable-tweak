@@ -44,7 +44,7 @@ setup(name = 'remarkable-tweak',
       ],
       entry_points = {
           'gui_scripts': [
-              'remarkable-tweak = remarkable_tweak.commands:main'
+              'remarkable-tweak = remarkable_tweak.__main__:main'
           ]
       },
       cmdclass = {
