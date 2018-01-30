@@ -22,7 +22,7 @@ class CleanCommand(Command):
             )
 
 setup(name = 'remarkable-tweak',
-      version = '0.0.1',
+      version = '0.1.0',
       description = 'Tweak tool for the reMarkable paper tablet.',
       long_description = readme(),
       classifiers = [
@@ -40,11 +40,12 @@ setup(name = 'remarkable-tweak',
       packages = find_packages(),
       install_requires = [
           "paramiko>=2.4.0",
+          "Pillow>=5.0.0",
       ],
       entry_points = {
-#          'console_scripts': [
-#              'remarkable-tweak = remarkable_tweak.commands:main'
-#          ]
+          'console_scripts': [
+              'remarkable-tweak = remarkable_tweak.commands:main'
+          ]
       },
       cmdclass = {
           'clean': CleanCommand,
