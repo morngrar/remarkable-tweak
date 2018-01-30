@@ -27,7 +27,7 @@ setup(
     description='Tweak tool for the reMarkable paper tablet.',
     long_description=readme(),
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: End Users/Desktop',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 3',

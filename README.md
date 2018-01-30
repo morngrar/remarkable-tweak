@@ -1,7 +1,27 @@
 # remarkable-tweak
 Tweak tool for the reMarkable paper tablet. Lets you organize your templates with no fuss.
 
-Can now be run using `python3 main.py`, and should work on linux, as long as Pillow is installed (`pip install Pillow`). An installable package supporting linux, windows and ios shall soon be made, and put onto PyPI.
+Can now be installed with "pip":
 
-*NOTE*: This is currently a very early stage, and not ready for release. Please contact if interested in contributing, though.
+### Instructions
+- Install python 3.x from [python.org](https://www.python.org/downloads/)
+(if you're on linux, this is probably already on your system)
+
+- In a terminal or console window enter `pip install remarkable-tweak`. This
+  should take care of the installation for you, however on some systems you
+  may have to use `pip3` as the command instead.
+
+- Run the tool with the command `remarkable-tweak` either from a terminal
+  window, Windows' 'Run' dialog, or similar. Your reMarkable has to be
+  connected via the stock USB cable.
+
+- You also need your tablet's password, which you find under About->'GPLv3
+  Compliance' (lower right corner of About-screen)
+
+    - To get to this menu, you simply tap the 'rM' logo in the top left corner
+      of your overview-screen.
+
+
+
+*NOTE*: This is currently in a BETA stage of development. Testing needs to be done on Windows and iOS. Please contact if interested in contributing.
 
