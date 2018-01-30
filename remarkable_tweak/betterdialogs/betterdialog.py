@@ -23,6 +23,8 @@ class BetterDialog(tk.Toplevel):
         if parent.winfo_viewable():
             self.transient(parent)
 
+        self.parent = parent
+
         if title:
             self.title(title)
 
