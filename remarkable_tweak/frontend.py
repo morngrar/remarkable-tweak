@@ -52,7 +52,7 @@ class Browser(bd.BetterDialog):
             command=self.on_right_click_delete
         )
 
-        bd.BetterDialog.__init__(self, parent, title)
+        bd.BetterDialog.__init__(self, parent, master_widget, title)
 
     def content(self, master):
         """Content frame of the dialog"""
@@ -268,6 +268,10 @@ class Main(bd.MainFrame):
             master, text="Browse reMarkable", command=self.on_click_browse
         ).pack(padx=2, pady=2, fill=tk.X)
 
+        ttk.Button(
+            master, text="Enter new password", command=self.on_click_password
+        ).pack(padx=2, pady=2, fill=tk.X)
+
         self.backup_button = ttk.Button(
             master, text="Load local backup", command=self.on_click_load
         )
@@ -282,6 +286,18 @@ class Main(bd.MainFrame):
         Loads templates from .remarkable-tweak/temp. Uploads changes to
         remarkable.
         """
+
+        try:
+            backend.password()
+        except:
+            mb.showerror(
+                    title="No password!",
+                    message=(
+                        "Couldn't find saved password. You should enter "
+                        "the reMarkable's SSH password, and retry."
+                )
+            )
+            return
 
         dialog = Browser(
             self.parent,
@@ -305,6 +321,20 @@ class Main(bd.MainFrame):
                         "reMarkable is connected via USB, and retry."
                         )
                 )
+
+    def on_click_password(self):
+        """Saves entered password to config file."""
+
+        dialog = bd.EntryDialog(
+            self.parent,
+            self,
+            "Password:",
+            title="Enter new password"
+        )
+
+        if dialog.result != None:
+            backend.update_password(dialog.result)
+
 
     def on_click_load(self):
         """Open browser dialog on local backup"""

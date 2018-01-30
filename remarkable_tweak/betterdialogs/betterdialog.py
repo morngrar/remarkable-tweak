@@ -17,13 +17,14 @@ def parse_geometry(geometry):
 class BetterDialog(tk.Toplevel):
     """A simple dialog for subclassing"""
 
-    def __init__(self, parent, title=None):
+    def __init__(self, parent, master, title=None):
         tk.Toplevel.__init__(self, parent)
         self.withdraw()
         if parent.winfo_viewable():
             self.transient(parent)
 
         self.parent = parent
+        self.master = master
 
         if title:
             self.title(title)
