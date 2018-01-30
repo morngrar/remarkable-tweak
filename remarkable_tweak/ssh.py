@@ -44,7 +44,8 @@ class RemarkableConnection():
         self.ssh_client.connect(
             hostname=host,
             username="root",
-            password=self.password
+            password=self.password,
+            timeout=3
         )
 
     def get_template_list(self):
