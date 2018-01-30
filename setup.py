@@ -43,7 +43,7 @@ setup(name = 'remarkable-tweak',
           "Pillow>=5.0.0",
       ],
       entry_points = {
-          'console_scripts': [
+          'gui_scripts': [
               'remarkable-tweak = remarkable_tweak.commands:main'
           ]
       },
