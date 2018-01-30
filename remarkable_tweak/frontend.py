@@ -299,12 +299,16 @@ class Main(bd.MainFrame):
             )
             return
 
-        dialog = Browser(
-            self.parent,
-            self,
-            system.WORKING_DIR,
-            title="Browsing reMarkable"
-        )
+        try:
+            dialog = Browser(
+                self.parent,
+                self,
+                system.WORKING_DIR,
+                title="Browsing reMarkable"
+            )
+        except:
+            self.connection_error()
+            return
 
         if dialog.result:
             paths = [
@@ -314,13 +318,7 @@ class Main(bd.MainFrame):
             try:
                 backend.upload(paths)
             except:
-                mb.showerror(
-                    title="Error!",
-                    message=(
-                        "Something went wrong!. Make sure that your "
-                        "reMarkable is connected via USB, and retry."
-                        )
-                )
+                self.connection_error()
 
     def on_click_password(self):
         """Saves entered password to config file."""
@@ -354,13 +352,16 @@ class Main(bd.MainFrame):
             try:
                 backend.upload(paths)
             except:
-                mb.showerror(
-                    title="Error!",
-                    message=(
-                        "Something went wrong!. Make sure that your "
-                        "reMarkable is connected via USB, and retry."
-                        )
-                )
+                self.connection_error()
+
+    def connection_error(self):
+        mb.showerror(
+            title="Error!",
+            message=(
+                "Something went wrong!. Make sure that your "
+                "reMarkable is connected via USB, and retry."
+            )
+        )
 
 if __name__=="__main__":
     Main(tk.Tk(), "Frontend test")
