@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import tkinter as tk
-import frontend
+from remarkable_tweak import frontend
 
 def main():
     frontend.Main(tk.Tk(), "reMarkable Tweak Tool")

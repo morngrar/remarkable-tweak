@@ -4,8 +4,8 @@
 
 import os
 
-import ssh
-import system
+from remarkable_tweak import ssh
+from remarkable_tweak import system
 
 
 def clean_working_dir():

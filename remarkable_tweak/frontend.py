@@ -8,8 +8,8 @@ import os
 import shutil
 
 import betterdialogs as bd
-import system
-import backend
+from remarkable_tweak import system
+from remarkable_tweak import backend
 
 class Browser(bd.BetterDialog):
     """Dialog for browsing templates."""
