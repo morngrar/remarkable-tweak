@@ -1,3 +1,10 @@
 #!/usr/bin/python3
 
-# This file will contain the main program functions
+import tkinter as tk
+import frontend
+
+def main():
+    frontend.Main(tk.Tk(), "reMarkable Tweak Tool")
+
+if __name__=="__main__":
+    main()
