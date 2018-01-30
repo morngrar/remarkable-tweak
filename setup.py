@@ -42,6 +42,7 @@ setup(
     install_requires=[
         "paramiko>=2.4.0",
         "Pillow>=5.0.0",
+        "betterdialogs>=1.0",
     ],
     entry_points={
         'gui_scripts': [
