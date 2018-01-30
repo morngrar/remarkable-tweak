@@ -184,7 +184,7 @@ class Browser(bd.BetterDialog):
 
 
     def on_click(self, event):
-        print("on_click")
+        """Loads last selection into preview"""
 
         selection = self.tree.focus()
         item = self.tree.item(selection)
@@ -220,7 +220,7 @@ class Browser(bd.BetterDialog):
 
 
     def on_right_click_delete(self, event=None):
-        print("on_right_click_delete called")
+        """Delete all selected entries."""
 
         selection = set(
             [
