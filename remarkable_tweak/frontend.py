@@ -255,10 +255,7 @@ class Browser(bd.BetterDialog):
 
         answer = mb.askquestion("Upload changes?", question)
 
-        if answer == "yes":
-            return 1
-        else:
-            return 0
+        return True if answer is "yes" else False
 
 class Main(bd.MainFrame):
     """Main menu window of the application."""
