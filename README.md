@@ -1,6 +1,9 @@
 # remarkable-tweak
 Tweak tool for the reMarkable paper tablet. Lets you organize your templates with no fuss.
 
+![image](https://user-images.githubusercontent.com/6575679/113891437-5c6e0e00-97c5-11eb-8600-c3970ef6b812.png)
+
+
 Can now be installed with "pip":
 
 ### Instructions
