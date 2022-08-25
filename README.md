@@ -1,6 +1,10 @@
 # remarkable-tweak
 Tweak tool for the reMarkable paper tablet. Lets you organize your templates with no fuss.
 
+⚠️ **NOTE: Repo is archived.** ⚠️ 
+
+**The changes to the official ReMarkable software makes this project redundant and obsolete for me personally. If you find value in it still, you are free to fork it as the license permits**
+
 ![image](https://user-images.githubusercontent.com/6575679/113891437-5c6e0e00-97c5-11eb-8600-c3970ef6b812.png)
 
 
